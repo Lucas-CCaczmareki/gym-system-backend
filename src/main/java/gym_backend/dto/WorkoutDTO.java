@@ -8,5 +8,4 @@ public class WorkoutDTO {
     private String day;
     private LocalDate date;
     private List<ExerciseDTO> exercises;
-
 }
