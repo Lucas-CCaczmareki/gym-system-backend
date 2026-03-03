@@ -12,7 +12,8 @@ public class ExerciseDTO {
     private String baseExercise;        // "supino reto"
     private ExerciseType type;          // "Barra livre", "Máquina", "Barra guiada", "Halter"...
     private ExerciseCategory category;  // multiarticular ou isolador
-    
+    private List<TargetMuscle> target;  // músculos utilizados no exercício
+
     // Esse expected range pode até virar um outro objeto no futuro
     // pra eu conseguir comparar com o resultado dos sets. Mas fica provisoriamente assim
     private String expectedRange;       // "4x8-10 rir2-1"
