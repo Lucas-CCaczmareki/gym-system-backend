@@ -126,7 +126,7 @@ CREATE TABLE execution (
 -- mas isso aqui não influencia tanto no resultado q eu quero, q é registro de progressão de carga
 CREATE TABLE training_set (
     id SERIAL PRIMARY KEY,
-    "weight" FLOAT DEFAULT 0.0,
+    "weight" FLOAT NOT NULL DEFAULT 0.0,
     t_isometric FLOAT DEFAULT 0.0, -- representa tempo em isometria (seja prancha ou pausas) em qualquer exercício
     reps INTEGER NOT NULL,
     rir INTEGER CHECK (rir >= 0), 

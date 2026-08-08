@@ -38,7 +38,7 @@ INSERT INTO muscle ("name") VALUES
     ('Flexores de quadril');
 
 -- -----------------------------------------------------------------------------------------------
--- Isso aqui foi gerado por IA com base na base de exercícios no "exercises.md" que eu criei.
+-- Isso aqui foi gerado por IA (e revisado) com base na base de exercícios no "exercises.md" que eu criei.
 -- deve ter jeitos mais inteligentes de fazer depois, vou estudar. Um amigo me recomendou ORM insert.
 
 INSERT INTO exercise ("name", "type", idEquipment, f_oneside) VALUES
@@ -160,8 +160,8 @@ INSERT INTO exercise ("name", "type", idEquipment, f_oneside) VALUES
     
 
     -- Triceps
-    ('Tríceps na polia', 'isolated', (SELECT id FROM equipment WHERE name = 'Pulley'), FALSE),
-    ('Tríceps na polia', 'isolated', (SELECT id FROM equipment WHERE name = 'Pulley'), TRUE), --esse unilateral muda a carga
+    ('Tríceps pulley', 'isolated', (SELECT id FROM equipment WHERE name = 'Pulley'), FALSE),
+    ('Tríceps pulley', 'isolated', (SELECT id FROM equipment WHERE name = 'Pulley'), TRUE), --esse unilateral muda a carga
 
     ('Tríceps testa', 'isolated', (SELECT id FROM equipment WHERE name = 'Barbell'), FALSE),
     ('Tríceps testa', 'isolated', (SELECT id FROM equipment WHERE name = 'Olympic barbell'), FALSE),
@@ -288,8 +288,16 @@ FROM (VALUES
     ('Mergulho em paralela', 'Deltoide', 'secondary'),
     ('Crossover', 'Peitoral', 'primary'),
     ('Crossover', 'Deltoide', 'secondary'),
+    ('Crossover inclinado', 'Peitoral', 'primary'),
+    ('Crossover inclinado', 'Deltoide', 'secondary'),
+    ('Crossover declinado', 'Peitoral', 'primary'),
+    ('Crossover declinado', 'Deltoide', 'secondary'),
     ('Crucifixo', 'Peitoral', 'primary'),
     ('Crucifixo', 'Deltoide', 'secondary'),
+    ('Crucifixo inclinado', 'Peitoral', 'primary'),
+    ('Crucifixo inclinado', 'Deltoide', 'secondary'),
+    ('Crucifixo declinado', 'Peitoral', 'primary'),
+    ('Crucifixo declinado', 'Deltoide', 'secondary'),
 
     -- Costas
     ('Barra fixa', 'Dorsais', 'primary'),
@@ -330,6 +338,8 @@ FROM (VALUES
     ('Desenvolvimento Arnold', 'Deltoide', 'primary'),
     ('Desenvolvimento Arnold', 'Tríceps', 'secondary'),
     ('Elevação lateral', 'Deltoide', 'primary'),
+    ('Remada alta', 'Deltoide', 'primary'),
+    ('Remada alta', 'Trapézio', 'secondary'),
     ('Elevação frontal', 'Deltoide', 'primary'),
     ('Encolhimento', 'Trapézio', 'primary'),
 
@@ -348,7 +358,7 @@ FROM (VALUES
     -- Tríceps
     ('Tríceps testa', 'Tríceps', 'primary'),
     ('Tríceps francês', 'Tríceps', 'primary'),
-    ('Tríceps na polia', 'Tríceps', 'primary'),
+    ('Tríceps pulley', 'Tríceps', 'primary'),
     ('Tríceps coice', 'Tríceps', 'primary'),
     ('Supino fechado', 'Tríceps', 'primary'),
     ('Supino fechado', 'Peitoral', 'secondary'),
@@ -423,3 +433,188 @@ JOIN exercise e ON e."name" = v.ex_name
 JOIN muscle m ON m."name" = v.musc_name;
 -- -----------------------------------------------------------------------------------------------
 
+-- -----------------------------------------------------------------------------------------------
+-- Insert de TREINOS
+-- Meus 4 treinos: Upper A/B, Lower A/B
+
+INSERT INTO workout ("name", usrEmail) VALUES
+    ('Upper A', 'lucascaczmareki@gmail.com'),
+    ('Upper B', 'lucascaczmareki@gmail.com'),
+    ('Lower A', 'lucascaczmareki@gmail.com'),
+    ('Lower B', 'lucascaczmareki@gmail.com'),
+
+    ('Push 1', 'lucascaczmareki@gmail.com'),
+    ('Pull 1', 'lucascaczmareki@gmail.com'),
+    ('Legs 1', 'lucascaczmareki@gmail.com'),
+    ('Full Body 1', 'lucascaczmareki@gmail.com');
+
+-- -----------------------------------------------------------------------------------------------
+
+-- insert de ROUTINE
+INSERT INTO routine ("name", usrEmail) VALUES
+    ('Tecnica - 2026/1',        'lucascaczmareki@gmail.com'),
+    ('Acumulacao - 2026/1',     'lucascaczmareki@gmail.com'),
+    ('Intensificacao - 2026/2', 'lucascaczmareki@gmail.com'),
+    ('Tecnica - 2026/2',        'lucascaczmareki@gmail.com');
+
+-- -----------------------------------------------------------------------------------------------
+
+-- insert de routine_workout
+-- combinação de treinos e rotinas. 
+-- ex: acumulacao 2026/1 tem os 2 uppers e os 2 lowers
+-- já intensificacao 2026/2 tem push pull e legs
+
+INSERT INTO routine_workout (idRoutine, idWorkout, f_active) VALUES
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/1'), (SELECT id FROM workout WHERE name = 'Upper A'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/1'), (SELECT id FROM workout WHERE name = 'Upper B'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/1'), (SELECT id FROM workout WHERE name = 'Lower A'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/1'), (SELECT id FROM workout WHERE name = 'Lower B'), TRUE),
+
+    ((SELECT id FROM routine WHERE name = 'Acumulacao - 2026/1'), (SELECT id FROM workout WHERE name = 'Upper A'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Acumulacao - 2026/1'), (SELECT id FROM workout WHERE name = 'Upper B'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Acumulacao - 2026/1'), (SELECT id FROM workout WHERE name = 'Lower A'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Acumulacao - 2026/1'), (SELECT id FROM workout WHERE name = 'Lower B'), TRUE),
+
+    ((SELECT id FROM routine WHERE name = 'Intensificacao - 2026/2'), (SELECT id FROM workout WHERE name = 'Push 1'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Intensificacao - 2026/2'), (SELECT id FROM workout WHERE name = 'Pull 1'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Intensificacao - 2026/2'), (SELECT id FROM workout WHERE name = 'Legs 1'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Intensificacao - 2026/2'), (SELECT id FROM workout WHERE name = 'Full Body 1'), FALSE),
+
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/2'), (SELECT id FROM workout WHERE name = 'Push 1'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/2'), (SELECT id FROM workout WHERE name = 'Pull 1'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/2'), (SELECT id FROM workout WHERE name = 'Legs 1'), TRUE),
+    ((SELECT id FROM routine WHERE name = 'Tecnica - 2026/2'), (SELECT id FROM workout WHERE name = 'Full Body 1'), FALSE);
+
+-- -----------------------------------------------------------------------------------------------
+
+-- insert no plan pra 1 upper A e um lower B
+
+INSERT INTO plan(idWorkout, idExercise, "sets", reps, rir) VALUES --esse insert vai usar t_isometric e t_rest padrões
+    -- dois exercicios num upper A
+    ((SELECT id FROM workout WHERE name = 'Upper A'),
+     (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE),
+     4, 6, 1),
+
+    ((SELECT id FROM workout WHERE name = 'Upper A'),
+     (SELECT id FROM exercise WHERE name = 'Tríceps pulley' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Pulley') AND f_oneside = FALSE),
+     3, 8, 2),
+
+    -- dois exercicios num lower B
+    ((SELECT id FROM workout WHERE name = 'Lower B'),
+     (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE),
+     4, 6, 1),
+
+    ((SELECT id FROM workout WHERE name = 'Lower B'),
+     (SELECT id FROM exercise WHERE name = 'Cadeira extensora' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Machine') AND f_oneside = TRUE),
+     3, 12, 2);
+
+-- -----------------------------------------------------------------------------------------------
+
+-- insert na session, 1 treino de cada
+
+INSERT INTO session("date", idWorkout) VALUES 
+    -- uma ida upper a
+    ('2026-01-01', (SELECT id FROM workout WHERE name = 'Upper A')),
+
+    -- uma ida lower b
+    ('2026-01-03', (SELECT id FROM workout WHERE name = 'Lower B'));
+
+-- -----------------------------------------------------------------------------------------------
+
+-- insert de execução dos 4 exercícios
+
+INSERT INTO execution(idSession, idPlan) VALUES
+    ((SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    ((SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Tríceps pulley' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Pulley') AND f_oneside = FALSE))),
+
+    ((SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    ((SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Cadeira extensora' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Machine') AND f_oneside = TRUE)));
+
+-- -----------------------------------------------------------------------------------------------
+
+-- insert das séries dos 4 exercícios realizados
+
+INSERT INTO training_set("weight", reps, rir, idSession, idPlan) VALUES
+    --supino
+    (27.5, 7, 2,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    (27.5, 7, 1,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    (30, 4, 0,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    (25, 7, 0,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    --triceps
+    (65, 10, 2,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Tríceps pulley' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Pulley') AND f_oneside = FALSE))),
+
+    (70, 7, 1,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Tríceps pulley' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Pulley') AND f_oneside = FALSE))),
+
+    (70, 7, 0,
+     (SELECT id FROM session WHERE date = '2026-01-01'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Upper A')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Tríceps pulley' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Pulley') AND f_oneside = FALSE))),
+
+    -- agachamento
+    (40, 6, 2,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    (40, 6, 1,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    (40, 6, 0,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    (40, 5, 0,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE))),
+
+    -- cadeira extensora
+    (100, 13, 2,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Cadeira extensora' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Machine') AND f_oneside = TRUE))),
+
+    (100, 13, 1,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Cadeira extensora' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Machine') AND f_oneside = TRUE))),
+
+    (100, 13, 0,
+     (SELECT id FROM session WHERE date = '2026-01-03'),
+     (SELECT id FROM plan WHERE idWorkout = (SELECT id FROM workout WHERE name = 'Lower B')
+        AND idExercise = (SELECT id FROM exercise WHERE name = 'Cadeira extensora' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Machine') AND f_oneside = TRUE)));
