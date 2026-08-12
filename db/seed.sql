@@ -5,10 +5,10 @@ TRUNCATE TABLE usr, exercise, muscle, mscl_activation, routine, workout,
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-INSERT INTO usr (email, nome, senha) VALUES
-    ('admin@gmail.com', 'Admin', crypt('admin123', gen_salt('bf'))),
-    ('lucascaczmareki@gmail.com', 'Lucas Caczmareki', crypt ('lucas123', gen_salt('bf'))),
-    ('joao@gmail.com', 'Joao Godinho', crypt ('joao123', gen_salt('bf')));
+INSERT INTO usr (email, "name", senha, f_active) VALUES
+    ('admin@gmail.com',             'Admin',            crypt ('admin123', gen_salt('bf')), TRUE),
+    ('lucascaczmareki@gmail.com',   'Lucas Caczmareki', crypt ('lucas123', gen_salt('bf')), TRUE),
+    ('joao@gmail.com',              'Joao Godinho',     crypt ('joao123', gen_salt('bf')),  TRUE);
     
 INSERT INTO equipment ("name", base_weight) VALUES
     ('Barbell', 10),            --1

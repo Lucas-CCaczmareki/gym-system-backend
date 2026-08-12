@@ -17,8 +17,9 @@ CREATE TYPE muscle_role AS ENUM ('primary', 'secondary');
 -- tables
 CREATE TABLE usr (
     email VARCHAR(255) PRIMARY KEY NOT NULL,
-    nome VARCHAR(255) NOT NULL,
-    senha VARCHAR(255) NOT NULL
+    "name" VARCHAR(255) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    f_active BOOLEAN NOT NULL
 );
 
 CREATE TABLE routine(
@@ -40,7 +41,7 @@ CREATE TABLE workout (
 CREATE TABLE routine_workout (
     idRoutine INTEGER NOT NULL,
     idWorkout INTEGER NOT NULL,
-    f_active BOOLEAN DEFAULT false,
+    f_active BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY(idRoutine, idWorkout),
 
