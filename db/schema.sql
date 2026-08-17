@@ -73,10 +73,26 @@ CREATE TABLE exercise (
     f_oneside BOOLEAN DEFAULT FALSE NOT NULL,
         
     idEquipment INTEGER NOT NULL,
+    idUsr VARCHAR(256), -- se for NULL, o exercício pertence à uma base comum e aparece pra todos usuários
 
     FOREIGN KEY (idEquipment) REFERENCES equipment(id) ON DELETE RESTRICT,
-    UNIQUE(name, idEquipment, f_oneside)
+    FOREIGN KEY (idUsr) REFERENCES usr(email) ON DELETE CASCADE --deleta todos exercícios criados por aquele usr
+    -- UNIQUE(name, idEquipment, f_oneside)
 );
+
+-- O comportamento desse id vai permitir os users criarem exercícios personalizados com o mesmo nome
+-- ou criar exercícios personalizados de exercicios q ja existem na base (trocando o nome por exemplo)
+-- mas vai bloquear o usr de criar o mesmo exercício duas vezes (a mesma coisa vale pra base)
+
+-- cria um índice único pra toda entrada (name, idEquip, oneside) com idUsr null
+CREATE UNIQUE INDEX exercise_global_unique
+    ON exercise(name, idEquipment, f_oneside)
+    WHERE idUsr IS NULL;
+
+-- cria um índice único pra toda entrada (name, idEquip, oneside) com idUsr not null
+CREATE UNIQUE INDEX exercise_personal_unique
+    ON exercise(name, idEquipment, f_oneside, idUsr)
+    WHERE idUsr IS NOT NULL;
 
 CREATE TABLE muscle (
     "name" VARCHAR(256) PRIMARY KEY
@@ -96,10 +112,16 @@ CREATE TABLE plan (
     id SERIAL PRIMARY KEY,
     t_isometric FLOAT DEFAULT 0.0,
     "sets" INTEGER NOT NULL,
-    reps INTEGER NOT NULL,
-    rir INTEGER CHECK (rir >= 0), 
-    t_rest FLOAT,
 
+    min_reps INTEGER NOT NULL,
+    max_reps INTEGER NOT NULL,
+    min_rir INTEGER CHECK (min_rir >= 0),
+    max_rir INTEGER CHECK (max_rir <= 10), 
+
+    CHECK (min_reps <= max_reps),
+    CHECK(min_rir <= max_rir),
+
+    t_rest FLOAT,
     idWorkout INTEGER NOT NULL,
     idExercise INTEGER NOT NULL,
     

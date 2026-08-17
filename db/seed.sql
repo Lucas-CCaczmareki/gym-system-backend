@@ -489,24 +489,24 @@ INSERT INTO routine_workout (idRoutine, idWorkout, f_active) VALUES
 
 -- insert no plan pra 1 upper A e um lower B
 
-INSERT INTO plan(idWorkout, idExercise, "sets", reps, rir) VALUES --esse insert vai usar t_isometric e t_rest padrões
+INSERT INTO plan(idWorkout, idExercise, "sets", min_reps, max_reps, min_rir, max_rir) VALUES --esse insert vai usar t_isometric e t_rest padrões
     -- dois exercicios num upper A
     ((SELECT id FROM workout WHERE name = 'Upper A'),
      (SELECT id FROM exercise WHERE name = 'Supino reto' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE),
-     4, 6, 1),
+     4, 6, 8, 0, 1),
 
     ((SELECT id FROM workout WHERE name = 'Upper A'),
      (SELECT id FROM exercise WHERE name = 'Tríceps pulley' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Pulley') AND f_oneside = FALSE),
-     3, 8, 2),
+     3, 6, 8, 0, 2),
 
     -- dois exercicios num lower B
     ((SELECT id FROM workout WHERE name = 'Lower B'),
      (SELECT id FROM exercise WHERE name = 'Agachamento' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Olympic barbell') AND f_oneside = FALSE),
-     4, 6, 1),
+     4, 6, 8, 0, 1),
 
     ((SELECT id FROM workout WHERE name = 'Lower B'),
      (SELECT id FROM exercise WHERE name = 'Cadeira extensora' AND idEquipment = (SELECT id FROM equipment WHERE name = 'Machine') AND f_oneside = TRUE),
-     3, 12, 2);
+     3, 10, 12, 0, 2);
 
 -- -----------------------------------------------------------------------------------------------
 
